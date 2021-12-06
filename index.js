@@ -1,31 +1,54 @@
-const { fetchMyIP, fetchCoordsByIP, fetchISSFlyOverTimes } = require('./iss');
+const  { nextISSTimesForMyLocation } = require('./iss');
 
-fetchMyIP((error, ip) => {
-  if (error) {
-    console.log("It didn't work!" , error);
-    return;
-  }
 
-  console.log('It worked! Returned IP: ' , ip);
+
+
+
+const printPassTimes = function(flytime) {
+  // console.log(flytime.response[1][duration])
+  
+  const datetime = new Date(0);
+  datetime.setUTCSeconds(flytime.response[0]['risetime']);
+  const duration = flytime.response[0]['duration'];
+  console.log(`Next pass at ${datetime} for ${duration} seconds!`);
+};
+
+nextISSTimesForMyLocation((error, flytime) => {
+if (error) {
+  return console.log("It didn't work!", error);
+}
+// success, print out the deets!
+printPassTimes(flytime);
 });
 
-fetchCoordsByIP('174.7.85.204', (error, ip) => {
-  if (error) {
-    console.log("It didn't work!" , error);
-    return;
-  }
+// fetchMyIP((error, ip) => {
+//   if (error) {
+//     console.log("It didn't work!" , error);
+//     return;
+//   }
 
-  console.log('It worked! Returned latitude/longittude: ' , ip);
-});
+//   console.log('It worked! Returned IP: ' , ip);
+// });
 
-const exampleCoords = { latitude: '49.3678', longitude: '-122.9278' };
+// fetchCoordsByIP('174.7.85.204', (error, ip) => {
+//   if (error) {
+//     console.log("It didn't work!" , error);
+//     return;
+//   }
 
-fetchISSFlyOverTimes(exampleCoords, (error, passTimes) => {
-  if (error) {
-    console.log("It didn't work!" , error);
-    return;
-  }
+//   console.log('It worked! Returned latitude/longittude: ' , ip);
+// });
 
-  console.log('It worked! Returned flyover times:' , passTimes);
+// const exampleCoords = { latitude: '49.3678', longitude: '-122.9278' };
 
-});
+// fetchISSFlyOverTimes(exampleCoords, (error, passOverTimes) => {
+//   if (error) {
+//     console.log("It didn't work!" , error);
+//     return;
+//   }
+
+//   console.log('It worked! Returned flyover times:' , passOverTimes);
+
+// });
+
+
